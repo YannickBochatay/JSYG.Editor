@@ -1,13 +1,16 @@
+/*jshint forin:false, eqnull:true*/
+/* globals JSYG*/
+
 (function(factory) {
     
-    if (typeof define != "undefined" && define.amd) define("jsyg-editor",["jsyg","jsyg-path","jsyg-boudingbox","jsyg-selection","jsyg-container","jsyg-draggable","jsyg-resizable","jsyg-rotatable"],factory);
+    if (typeof define != "undefined" && define.amd) define("jsyg-editor",["jsyg","jsyg-path","jsyg-boudingbox","jsyg-selection","jsyg-container","jsyg-rotatable","jsyg-draggable","jsyg-resizable"],factory);
     else if (typeof JSYG != "undefined") {
-        if (JSYG.Path && JSYG.Vect && JSYG.BoundingBox && JSYG.Selection && JSYG.Container && JSYG.Draggable && JSYG.Resizable && JSYG.Rotatable) factory(JSYG,JSYG.Path,JSYG.BoundingBox,JSYG.Selection,JSYG.Container,JSYG.Draggable,JSYG.Resizable,JSYG.Rotatable);
+        if (JSYG.Path && JSYG.Vect && JSYG.BoundingBox && JSYG.Selection && JSYG.Container && JSYG.Draggable && JSYG.Resizable && JSYG.Rotatable) factory(JSYG,JSYG.Path,JSYG.BoundingBox,JSYG.Selection,JSYG.Container,JSYG.Rotatable);
         else throw new Error("Dependency is missing");
     }
     else throw new Error("JSYG is needed");
     
-})(function(JSYG,Path,BoundingBox,Selection,Container,Draggable,Resizable,Rotatable) {
+})(function(JSYG,Path,BoundingBox,Selection,Container,Rotatable) {
     
     "use strict";
     
@@ -49,7 +52,7 @@
         
         if (arg) this.setNode(arg);
         if (opt) this.enable(opt);
-    };
+    }
     
     Editor.prototype = new JSYG.StdConstruct();
     
@@ -60,31 +63,31 @@
      */
     Editor.prototype.onchangetarget = null;
     /**
-     * Fonctions à exécuter avant l'affichage de la bo�te d'édition (renvoyer false pour emp�cher l'événement)
+     * Fonctions à exécuter avant l'affichage de la boite d'édition (renvoyer false pour empecher l'événement)
      */
     Editor.prototype.onbeforeshow=null;
     /**
-     * Fonctions à exécuter à l'affichage de la bo�te d'édition
+     * Fonctions à exécuter à l'affichage de la boite d'édition
      */
     Editor.prototype.onshow=null;
     /**
-     * Fonctions à exécuter avant la suppression de la bo�te d'édition (renvoyer false pour emp�cher l'événement)
+     * Fonctions à exécuter avant la suppression de la boite d'édition (renvoyer false pour empecher l'événement)
      */
     Editor.prototype.onbeforehide=null;
     /**
-     * Fonctions à exécuter à la suppression de la bo�te d'édition
+     * Fonctions à exécuter à la suppression de la boite d'édition
      */
     Editor.prototype.onhide=null;
     /**
-     * Fonctions à exécuter à la mise à jour de la bo�te d'édition
+     * Fonctions à exécuter à la mise à jour de la boite d'édition
      */
     Editor.prototype.onupdate=null;
     /**
-     * Fonctions à exécuter à chaque fois qu'une action d'édition se pr�pare, qu'elle est lieu ou non (mousedown sur un contrôle) 
+     * Fonctions à exécuter à chaque fois qu'une action d'édition se prépare, qu'elle est lieu ou non (mousedown sur un contrôle) 
      */
     Editor.prototype.onstart=null;
     /**
-     * Fonctions à exécuter à chaque fois qu'une action d'édition d�bute 
+     * Fonctions à exécuter à chaque fois qu'une action d'édition débute 
      */
     Editor.prototype.ondragstart=null;
     /**
@@ -96,7 +99,7 @@
      */
     Editor.prototype.ondragend=null;
     /**
-     * Fonctions à exécuter au rel�chement du bouton de souris, qu'il y ait eu modification ou non
+     * Fonctions à exécuter au relachement du bouton de souris, qu'il y ait eu modification ou non
      */
     Editor.prototype.onend=null;
     
@@ -128,7 +131,7 @@
     
     /**
      * définit ou renvoie l'élément à éditer
-     * @param arg argument JSYG optionnel, si renseign� définit la cible à éditer
+     * @param arg argument JSYG optionnel, si renseigné définit la cible à éditer
      * @returns {Editor,JSYG}
      */ 
     Editor.prototype.target = function(arg,_preventEvent) {
@@ -181,7 +184,7 @@
     };
     
     /**
-     * Indique si plusieurs éléments sont édit�s à la fois
+     * Indique si plusieurs éléments sont édités à la fois
      * @returns {Boolean}
      */
     Editor.prototype.isMultiSelection = function() {
@@ -241,7 +244,7 @@
     /**
      * Affiche le conteneur d'édition
      * @param e optionnel, objet Event afin de commencer tout de suite le déplacement de l'élément
-     * (ainsi sur un m�me événement mousedown on peut afficher le conteneur et commencer le déplacement)
+     * (ainsi sur un meme événement mousedown on peut afficher le conteneur et commencer le déplacement)
      * @returns {Editor}
      */
     Editor.prototype.show = function(e,_preventEvent) {
@@ -269,7 +272,7 @@
     };
     
     /**
-     * Mise à jour du conteneur d'édition. (Si l'élément est modifi� par un autre moyen que les contrôles du conteneur,
+     * Mise à jour du conteneur d'édition. (Si l'élément est modifié par un autre moyen que les contrôles du conteneur,
      * il peut s'avérer utile de mettre à jour le conteneur)
      * @returns {Editor}
      */
@@ -365,7 +368,7 @@
                 that.target(list).show(e);
             },
             
-            "deselectedlist" : function(e,list) { that.hide(e); }
+            "deselectedlist" : function(e) { that.hide(e); }
         };
         
         this.enabled = true;
@@ -410,7 +413,7 @@
          * référence vers l'objet Editor parent
          */
         this.editor = editorObject;
-    };
+    }
     
     ClipBoard.prototype = new JSYG.StdConstruct();
     
@@ -467,8 +470,9 @@
         if (!this.buffer) return this;
         
         var clone = new JSYG(this.buffer),
-        parent = new JSYG(parent || this._parent),
-        children,dim;
+            children,dim;
+        
+        parent = new JSYG(parent || this._parent);        
         
         clone.appendTo(parent);
         
@@ -604,7 +608,7 @@
          */
         onhide:null,
         /**
-         * Fonction(s) à exécuter quand on pr�pare un déplacement (mousedown sur le contrôle)
+         * Fonction(s) à exécuter quand on prépare un déplacement (mousedown sur le contrôle)
          */
         onstart:null,
         /**
@@ -638,13 +642,13 @@
          * @see JSYG.StdConstruct.prototype.on
          * @returns {CtrlPoints}
          */
-        on : function(evt,fct) { return JSYG.StdConstruct.prototype.on.apply(this,arguments); },
+        on : JSYG.StdConstruct.prototype.on,
         /**
          * Retrait d'écouteurs d'événements customisés
          * @see JSYG.StdConstruct.prototype.on
          * @returns {CtrlPoints}
          */
-        off : function(evt,fct) { return JSYG.StdConstruct.prototype.off.apply(this,arguments); },
+        off : JSYG.StdConstruct.prototype.off,
         /**
          * Déclenche un événement customisé
          * @see JSYG.StdConstruct.prototype.trigger
@@ -758,7 +762,7 @@
                     
                     if (!that.list[i]) { that.list[i] = {}; }
                     
-                    var pt1,pt2,jShape,path,drag,draggable,
+                    var pt1,pt2,jShape,path,drag,
                     test1 = seg.x1!=null && seg.y1!=null,
                     test2 = seg.x2!=null && seg.y2!=null;
                     
@@ -819,7 +823,7 @@
                                     }
                                 }
                                 
-                                needReplace && jPath.replaceSeg(i,seg);
+                                if (needReplace) jPath.replaceSeg(i,seg);
                                 
                                 that.editor.trigger('drag',node,e);
                                 that.trigger('drag',node,e);
@@ -927,7 +931,7 @@
                                     }
                                 }
                                 
-                                needReplace && jPath.replaceSeg(i,seg);
+                                if (needReplace) jPath.replaceSeg(i,seg);
                                 
                                 that.editor.trigger('drag',node,e);
                                 that.trigger('drag',node,e);
@@ -1123,17 +1127,17 @@
          * Conteneur des contrôles
          */
         this.container = new JSYG('<g>')[0];
-    };
+    }
     
     MainPoints.prototype = {
 	
         constructor : MainPoints,
         /**
-         * Classe appliqu�e au conteneur des contrôles
+         * Classe appliquée au conteneur des contrôles
          */
         className : 'mainPoints',
         /**
-         * Forme utilis�e pour les contrôles
+         * Forme utilisée pour les contrôles
          */
         shape : 'circle',
         /**
@@ -1145,11 +1149,11 @@
          */
         height:10,
         /**
-         * classe appliqu�e au dernier point d'un chemin si le chemin est ferm�
+         * classe appliquée au dernier point d'un chemin si le chemin est fermé
          */
         classNameClosing : 'closingPoint',
         /**
-         * Force de la magn�tisation entre les points extr�mes pour fermer le chemin 
+         * Force de la magnétisation entre les points extremes pour fermer le chemin 
          */
         strengthClosingMagnet : 10,
         /**
@@ -1165,7 +1169,7 @@
          */
         onhide:null,
         /**
-         * Fonction(s) à exécuter quand on pr�pare un déplacement (mousedown sur le contrôle)
+         * Fonction(s) à exécuter quand on prepare un déplacement (mousedown sur le contrôle)
          */
         onstart:null,
         /**
@@ -1181,7 +1185,7 @@
          */
         ondragend:null,
         /**
-         * Fonction(s) à exécuter au rel�chement de la souris, qu'il y ait eu modification ou non
+         * Fonction(s) à exécuter au relachement de la souris, qu'il y ait eu modification ou non
          */
         onend:null,
         
@@ -1193,29 +1197,29 @@
         
         set : JSYG.StdConstruct.prototype.set,
         /**
-         * Ajout d'�couteurs d'événements customis�s
+         * Ajout d'écouteurs d'événements customisés
          * @see JSYG.StdConstruct.prototype.on
          * @returns {MainPoints}
          */
-        on : function(evt,fct) { return JSYG.StdConstruct.prototype.on.apply(this,arguments); },
+        on : JSYG.StdConstruct.prototype.on,
         /**
-         * Retrait d'�couteurs d'événements customis�s
+         * Retrait d'écouteurs d'événements customisés
          * @see JSYG.StdConstruct.prototype.on
          * @returns {MainPoints}
          */
-        off : function(evt,fct) { return JSYG.StdConstruct.prototype.off.apply(this,arguments); },
+        off : JSYG.StdConstruct.prototype.off,
         /**
-         * D�clenche un événement customis�
+         * Déclenche un événement customisé
          * @see JSYG.StdConstruct.prototype.trigger
          */
         trigger : JSYG.StdConstruct.prototype.trigger,
         
         /**
-         * Indique si les contrôles sont activ�s ou non
+         * Indique si les contrôles sont activés ou non
          */
         enabled : false,
         /**
-         * Indique si les contrôles sont affich�s ou non
+         * Indique si les contrôles sont affichés ou non
          */
         display : false,
         
@@ -1311,14 +1315,14 @@
                 mtxScreen,
                 ctrlPoints = this.editor.ctrlsCtrlPoints.list;
                 
-                //on �crase la fonction start
+                //on écrase la fonction start
                 start = function(e){
                     new JSYG(that.container).appendTo(that.editor.box.container);
                     isClosed = jNode.isClosed();
                     mtxScreen = jNode.getMtx('screen');
                     that.editor.trigger('start',node,e);
                     that.trigger('start',node,e);
-                },
+                };
                 
                 jNode.rel2abs();
                 
@@ -1338,8 +1342,8 @@
                                 jPoint = new JSYG(this),
                                 selfCTM = jNode.getMtx(svg),
                                 center = jPoint.getCenter(),
-                                posPt = new JSYG.Vect(center.x,center.y).mtx(jPoint.getMtx()), //position dans le rep�re d'édition
-                                pt = posPt.mtx(selfCTM.inverse()), //position dans le rep�re de l'élément édit�
+                                posPt = new JSYG.Vect(center.x,center.y).mtx(jPoint.getMtx()), //position dans le repère d'édition
+                                pt = posPt.mtx(selfCTM.inverse()), //position dans le repère de l'élément édité
                                 decX = pt.x-seg.x,
                                 decY = pt.y-seg.y,
                                 item,pt1,pt2,
@@ -1350,7 +1354,7 @@
                                     firstSeg.x = pt.x;
                                     firstSeg.y = pt.y;
                                     new JSYG(that.list[0]).setCenter(posPt.x,posPt.y);
-                                    needReplace && jNode.replaceSeg(0,jNode.getSeg(firstSeg));
+                                    if (needReplace) jNode.replaceSeg(0,jNode.getSeg(firstSeg));
                                 }
                                 
                                 if (that.strengthClosingMagnet!=null && (seg === lastSeg || seg === firstSeg)) {
@@ -1412,7 +1416,7 @@
                                         }
                                     }
                                     
-                                    needReplace && jNode.replaceSeg(i,seg);
+                                    if (needReplace) jNode.replaceSeg(i,seg);
                                 }
                                 
                                 that.editor.trigger('drag',node,e);
@@ -1447,7 +1451,7 @@
                     else if (that.list[i]) that._remove(i);
                 });
                 
-                //adaptation des points extr�mes pour courbes ferm�es/ouvertes
+                //adaptation des points extremes pour courbes fermées/ouvertes
                 var first = new JSYG(that.list[0]),
                 last = new JSYG(that.list[that.list.length-1]),
                 center = first.getCenter();
@@ -1617,7 +1621,7 @@
          */
         type : 'attributes',
         /**
-         * Permet de limiter le déplacement à l'int�rieur de l'offsetParent (null pour annuler, valeur num�rique n�gative pour aller au del� de l'offsetParent)
+         * Permet de limiter le déplacement à l'intérieur de l'offsetParent (null pour annuler, valeur numérique négative pour aller au delà de l'offsetParent)
          */
         bounds : null,
         /**
@@ -1626,11 +1630,11 @@
          */
         options : null,
         /**
-         * Indique si ce contrôle est actif dans le cas d'une s�lection multiple
+         * Indique si ce contrôle est actif dans le cas d'une sélection multiple
          */
         multiple : true,
         /**
-         * Fonction(s) à exécuter quand on pr�pare un déplacement (mousedown sur le contrôle)
+         * Fonction(s) à exécuter quand on prépare un déplacement (mousedown sur le contrôle)
          */
         onstart:null,
         /**
@@ -1646,7 +1650,7 @@
          */
         ondragend:null,
         /**
-         * Fonction(s) à exécuter au rel�chement de la souris, qu'il y ait eu déplacement ou non
+         * Fonction(s) à exécuter au relachement de la souris, qu'il y ait eu déplacement ou non
          */
         onend:null,
         
@@ -1656,21 +1660,21 @@
          * @see JSYG.StdConstruct.prototype.on
          * @returns {Drag}
          */
-        on : function(evt,fct) { return JSYG.StdConstruct.prototype.on.apply(this,arguments); },
+        on : JSYG.StdConstruct.prototype.on,
         /**
-         * Retrait d'�couteurs d'événements customis�s
+         * Retrait d'écouteurs d'événements customisés
          * @see JSYG.StdConstruct.prototype.on
          * @returns {Drag}
          */
-        off : function(evt,fct) { return JSYG.StdConstruct.prototype.off.apply(this,arguments); },
+        off : JSYG.StdConstruct.prototype.off,
         /**
-         * Déclenche un événement customis�
+         * Déclenche un événement customisé
          * @see JSYG.StdConstruct.prototype.trigger
          */
         trigger : JSYG.StdConstruct.prototype.trigger,
         
         /**
-         * Indique si le contr�ls est activé ou non
+         * Indique si le controle est activé ou non
          */
         enabled : false,
         /**
@@ -1848,7 +1852,7 @@
          * Conteneur des contrôles
          */
         this.container = new JSYG('<g>')[0];
-    };
+    }
     
     Resize.prototype = {
 	
@@ -1857,15 +1861,15 @@
         container : null,
         
         /**
-         * Classe appliqu�e au conteneur des contrôles
+         * Classe appliquée au conteneur des contrôles
          */
         className : 'resize',
         /**
-         * Forme utilis�e pour les contrôles
+         * Forme utilisée pour les contrôles
          */
         shape : 'circle',
         /**
-         * lien utilis� si shape est défini à "use"
+         * lien utilisé si shape est défini à "use"
          */
         xlink : null,
         /**
@@ -1881,7 +1885,7 @@
          */
         type : 'attributes',
         /**
-         * Indique si ce contrôle est actif dans le cas d'une s�lection multiple
+         * Indique si ce contrôle est actif dans le cas d'une sélection multiple
          */
         multiple : false,
         /**
@@ -1893,7 +1897,7 @@
          */
         onhide:null,
         /**
-         * Fonction(s) à exécuter quand on pr�pare un déplacement (mousedown sur le contrôle)
+         * Fonction(s) à exécuter quand on prépare un déplacement (mousedown sur le contrôle)
          */
         onstart:null,
         /**
@@ -1909,7 +1913,7 @@
          */
         ondragend:null,
         /**
-         * Fonction(s) à exécuter au rel�chement de la souris, qu'il y ait eu modification ou non
+         * Fonction(s) à exécuter au relaéchement de la souris, qu'il y ait eu modification ou non
          */
         onend:null,
         /**
@@ -1921,11 +1925,11 @@
          */
         vertical : true,
         /**
-         * définit si le ratio doit �tre conservé
+         * définit si le ratio doit etre conservé
          */
         keepRatio : false,
         /**
-         * Permet de limiter le redimensionnement à l'int�rieur de l'offsetParent (null pour annuler, valeur num�rique n�gative pour aller au del� de l'offsetParent)
+         * Permet de limiter le redimensionnement à l'intérieur de l'offsetParent (null pour annuler, valeur numérique négative pour aller au delà de l'offsetParent)
          */
         bounds : null,
         /**
@@ -1936,28 +1940,28 @@
         
         set : JSYG.StdConstruct.prototype.set,
         /**
-         * Ajout d'�couteurs d'événements customis�s
+         * Ajout d'écouteurs d'événements customisés
          * @see JSYG.StdConstruct.prototype.on
          * @returns {Resize}
          */
-        on : function(evt,fct) { return JSYG.StdConstruct.prototype.on.apply(this,arguments); },
+        on : JSYG.StdConstruct.prototype.on,
         /**
-         * Retrait d'�couteurs d'événements customis�s
+         * Retrait d'écouteurs d'événements customisés
          * @see JSYG.StdConstruct.prototype.on
          * @returns {Resize}
          */
-        off : function(evt,fct) { return JSYG.StdConstruct.prototype.off.apply(this,arguments); },
+        off : JSYG.StdConstruct.prototype.off,
         /**
-         * D�clenche un événement customis�
+         * Déclenche un événement customisé
          * @see JSYG.StdConstruct.prototype.trigger
          */
         trigger : JSYG.StdConstruct.prototype.trigger,
         /**
-         * Indique si les contrôles sont activ�s ou non
+         * Indique si les contrôles sont activés ou non
          */
         enabled : false,
         /**
-         * Indique si les contrôles sont affich�s ou non
+         * Indique si les contrôles sont affichés ou non
          */
         display : false,
         /**
@@ -1973,7 +1977,7 @@
             this.enabled = true;
         },
         /**
-         * D�sactivation des contrôles
+         * Désactivation des contrôles
          *  @returns {Resize}
          */
         disable : function() {
@@ -2179,7 +2183,7 @@
             var node = this.editor._target;
             if (!node) return this.hide();
             
-            //il y a changemet des options, il faut r�afficher tout
+            //il y a changemet des options, il faut réafficher tout
             if (!this.keepRatio && !this.list[4] || this.keepRatio && this.list[4]) { return this.show(); }
             
             var jNode = new JSYG(node),
@@ -2237,21 +2241,21 @@
          * Conteneur des contrôles
          */
         this.container = new JSYG('<g>')[0];
-    };
+    }
     
     Rotate.prototype = {
 	
         constructor : Rotate,
         /**
-         * Classe appliqu�e au conteneur des contrôles
+         * Classe appliquée au conteneur des contrôles
          */
         className : 'rotate',
         /**
-         * Forme utilis�e pour les contrôles
+         * Forme utilisée pour les contrôles
          */
         shape : 'circle',
         /**
-         * lien utilis� si shape est défini à "use"
+         * lien utilisé si shape est défini à "use"
          */
         xlink : null,
         /**
@@ -2263,7 +2267,7 @@
          */
         height:10,
         /**
-         * Indique si ce contrôle est actif dans le cas d'une s�lection multiple
+         * Indique si ce contrôle est actif dans le cas d'une sélection multiple
          */
         multiple : false,
         /**
@@ -2279,7 +2283,7 @@
          */
         onhide:null,
         /**
-         * Fonction(s) à exécuter quand on pr�pare un déplacement (mousedown sur le contrôle)
+         * Fonction(s) à exécuter quand on prépare un déplacement (mousedown sur le contrôle)
          */
         onstart:null,
         /**
@@ -2295,7 +2299,7 @@
          */
         ondragend:null,
         /**
-         * Fonction(s) à exécuter au rel�chement de la souris, qu'il y ait eu modification ou non
+         * Fonction(s) à exécuter au relachement de la souris, qu'il y ait eu modification ou non
          */
         onend:null,
         /**
@@ -2306,28 +2310,28 @@
         
         set : JSYG.StdConstruct.prototype.set,
         /**
-         * Ajout d'�couteurs d'événements customis�s
+         * Ajout d'écouteurs d'événements customisés
          * @see JSYG.StdConstruct.prototype.on
          * @returns {Rotate}
          */
-        on : function(evt,fct) { return JSYG.StdConstruct.prototype.on.apply(this,arguments); },
+        on : JSYG.StdConstruct.prototype.on,
         /**
-         * Retrait d'�couteurs d'événements customis�s
+         * Retrait d'écouteurs d'événements customisés
          * @see JSYG.StdConstruct.prototype.on
          * @returns {Rotate}
          */
-        off : function(evt,fct) { return JSYG.StdConstruct.prototype.off.apply(this,arguments); },
+        off : JSYG.StdConstruct.prototype.off,
         /**
-         * D�clenche un événement customis�
+         * Déclenche un événement customisé
          * @see JSYG.StdConstruct.prototype.trigger
          */
         trigger : JSYG.StdConstruct.prototype.trigger,
         /**
-         * Indique si les contrôles sont activ�s ou non
+         * Indique si les contrôles sont activés ou non
          */
         enabled : false,
         /**
-         * Indique si les contrôles sont affich�s ou non
+         * Indique si les contrôles sont affichés ou non
          */
         display : false,
         /**
@@ -2343,7 +2347,7 @@
             this.enabled = true;			
         },
         /**
-         * D�sactivation des contrôles
+         * Désactivation des contrôles
          *  @returns {Rotate}
          */
         disable : function() {
