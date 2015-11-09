@@ -18,6 +18,7 @@
         <script src="../bower_components/jsyg-selection/JSYG.Selection.js"></script>
         <script src="../bower_components/jsyg-container/JSYG.Container.js"></script>
         <script src="../bower_components/jsyg-boundingbox/JSYG.BoundingBox.js"></script>
+        <script src="../bower_components/jsyg-alignment/JSYG.Alignment.js"></script>
         <script src="../JSYG.Editor.js"></script>
     </head>
     <body>
@@ -43,6 +44,7 @@
         <button id="moveToBack">Move target to back</button>
         <button id="moveFront">Move front</button>
         <button id="moveToFront">Move target to front</button>
+        <button id="alignSelection">Align selected elements to left</button>
         <br/>
                    
         <script>
@@ -106,6 +108,12 @@
                 editor.ctrlsResize.keepRatio = this.checked;
                 editor.update();
             });
+            
+            new JSYG("#alignSelection").on("click",function() {
+                editor.alignSelection("left");
+            });
+            
+            
             
             var actions = ["moveBack","moveToBack","moveFront","moveToFront"];
             

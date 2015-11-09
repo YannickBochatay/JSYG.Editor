@@ -3,9 +3,9 @@
 
 (function(factory) {
     
-    if (typeof define != "undefined" && define.amd) define("jsyg-editor",["jsyg","jsyg-path","jsyg-boudingbox","jsyg-selection","jsyg-container","jsyg-rotatable","jsyg-draggable","jsyg-resizable"],factory);
+    if (typeof define != "undefined" && define.amd) define("jsyg-editor",["jsyg","jsyg-path","jsyg-boudingbox","jsyg-selection","jsyg-container","jsyg-rotatable","jsyg-draggable","jsyg-resizable","jsyg-alignment"],factory);
     else if (typeof JSYG != "undefined") {
-        if (JSYG.Path && JSYG.Vect && JSYG.BoundingBox && JSYG.Selection && JSYG.Container && JSYG.Draggable && JSYG.Resizable && JSYG.Rotatable) factory(JSYG,JSYG.Path,JSYG.BoundingBox,JSYG.Selection,JSYG.Container,JSYG.Rotatable);
+        if (JSYG.Path && JSYG.Vect && JSYG.BoundingBox && JSYG.Selection && JSYG.Container && JSYG.Draggable && JSYG.Resizable && JSYG.Rotatable && JSYG.Alignment) factory(JSYG,JSYG.Path,JSYG.BoundingBox,JSYG.Selection,JSYG.Container,JSYG.Rotatable);
         else throw new Error("Dependency is missing");
     }
     else throw new Error("JSYG is needed");
@@ -266,7 +266,7 @@
         
         if (!_preventEvent) this.trigger('show',this.node,e,this._target);
         
-        if (typeof e == "object" && e.type == "mousedown" && this.ctrlsDrag.enabled) this.ctrlsDrag.start(e);
+        if (e && e.type == "mousedown" && this.ctrlsDrag.enabled) this.ctrlsDrag.start(e);
         
         return this;
     };
@@ -336,6 +336,20 @@
                 if (ctrl) ctrl.disable();
             });
         }
+        
+        return this;
+    };
+    
+    /**
+     * Aligne les éléments sélectionnés
+     * @param {String} type (top,middle,bottom,left,center,right)
+     * @returns {Editor}
+     */
+    Editor.prototype.alignSelection = function(type) {
+        
+        if (!this.isMultiSelection()) return this;
+        
+        this.target().align(type);
         
         return this;
     };
@@ -470,7 +484,7 @@
         if (!this.buffer) return this;
         
         var clone = new JSYG(this.buffer),
-            children,dim;
+        children,dim;
         
         parent = new JSYG(parent || this._parent);        
         
