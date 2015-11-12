@@ -103,6 +103,11 @@
      */
     Editor.prototype.onend=null;
 
+    /**
+     * Fonctions à exécuter à tout changement
+     */
+    Editor.prototype.onchange=null;
+    
     Editor.prototype.set = function(options) {
 
         for (var n in options) {
@@ -352,6 +357,8 @@
         this.target().align(type);
 
         this.update();
+        
+        this.trigger("change",this.node,this._target);
 
         return this;
     };
@@ -477,6 +484,7 @@
         this.editor.hide();
 
         this.trigger('cut',this.editor.node,this.buffer);
+        this.trigger('change',this.editor.node,this.buffer);
 
         return this;
     };
@@ -511,6 +519,7 @@
         else this.editor.target(clone).show(true);
 
         this.trigger('paste',this.editor.node,clone[0]);
+        this.trigger('change',this.editor.node,clone[0]);
 
         return this;
     };
@@ -755,6 +764,7 @@
             dragend = function(e) {
                 that.editor.update();
                 that.editor.trigger('dragend',node,e);
+                that.editor.trigger('change',node,e);
                 that.trigger('dragend',node,e);
             },
             end = function(e){
@@ -1311,6 +1321,7 @@
             dragend = function(e) {
                 that.editor.update();
                 that.editor.trigger('dragend',node,e);
+                that.editor.trigger('change',node,e);
                 that.trigger('dragend',node,e);
             },
             end = function(e){
@@ -1793,6 +1804,7 @@
                     }
                     that.editor.update();
                     that.editor.trigger('dragend',node,e);
+                    that.editor.trigger('change',node,e);
                     that.trigger('dragend',node,e);
                 },
                 onend : function(e){
@@ -2079,6 +2091,7 @@
                 new JSYG(that.container).appendTo(parent); //pour que les controles restent au 1er plan
                 that.editor.update();
                 that.editor.trigger('dragend',node,e);
+                that.editor.trigger('change',node,e);
                 that.trigger('dragend',node,e);
             },
 
@@ -2452,6 +2465,7 @@
                 new JSYG(that.container).appendTo(parent); //pour remettre les controles au 1er plan
                 that.editor.update();
                 that.editor.trigger('dragend',node,e);
+                that.editor.trigger('change',node,e);
                 that.trigger('dragend',node,e);
             },
 
