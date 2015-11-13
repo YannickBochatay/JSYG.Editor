@@ -479,12 +479,12 @@
         this.buffer = target.clone()[0];
         this._parent = target.parent()[0];
 
-        this.editor.target().remove();
-
         this.editor.hide();
-
+        this.editor.target().remove();
+        this.editor.targetRemove();
+        
         this.trigger('cut',this.editor.node,this.buffer);
-        this.trigger('change',this.editor.node,this.buffer);
+        this.editor.trigger('change',this.editor.node,this.buffer);
 
         return this;
     };
@@ -519,7 +519,7 @@
         else this.editor.target(clone).show(true);
 
         this.trigger('paste',this.editor.node,clone[0]);
-        this.trigger('change',this.editor.node,clone[0]);
+        this.editor.trigger('change',this.editor.node,clone[0]);
 
         return this;
     };
