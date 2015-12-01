@@ -159,7 +159,7 @@
 
             container = new Container(this._tempoContainer).freeItems();
 
-            target.parent().eq(0).append(container);
+            container.insertBefore(target[0]);
 
             container.addItems(target);
 
@@ -1313,6 +1313,8 @@
             if (container && container.parentNode) this.show();
 
             this.enabled = true;
+            
+            return this;
         },
 
         /**
@@ -1320,8 +1322,12 @@
          *  @returns {MainPoints}
          */
         disable : function() {
+            
             this.hide();
+            
             this.enabled = false;
+            
+            return this;
         },
 
         /**
@@ -1376,6 +1382,9 @@
             if (tag === 'path') {
 
                 jNode = new Path(node);
+                
+                jNode.rel2abs();
+                
                 list = jNode.getSegList();
 
                 var isClosed = jNode.isClosed(),
