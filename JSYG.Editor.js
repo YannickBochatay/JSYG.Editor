@@ -2052,6 +2052,7 @@
             var container = this.editor.box.container;
             if (container && container.parentNode) this.show();
             this.enabled = true;
+            return this;
         },
         /**
          * Désactivation des contrôles
@@ -2060,6 +2061,7 @@
         disable : function() {
             this.hide();
             this.enabled = false;
+            return this;
         },
         /**
          * Affichage des contrôles
