@@ -4,22 +4,22 @@
         <meta charset="utf-8">
         <title>JSYG tests</title>
             
-        <link rel="stylesheet" href="../bower_components/jsyg-boundingbox/JSYG.BoundingBox.css"/>
-        <link rel="stylesheet" href="../bower_components/jsyg-selection/JSYG.Selection.css"/>
-        <link rel="stylesheet" href="../JSYG.Editor.css"/>
+        <link rel="stylesheet" href="bower_components/jsyg-boundingbox/JSYG.BoundingBox.css"/>
+        <link rel="stylesheet" href="bower_components/jsyg-selection/JSYG.Selection.css"/>
+        <link rel="stylesheet" href="JSYG.Editor.css"/>
             
-        <script src="../bower_components/jquery/dist/jquery.js"></script>
-        <script src="../bower_components/jsyg/JSYG.js"></script>
-        <script src="../bower_components/jQuery.Hotkeys/jquery.hotkeys.js"></script>
-        <script src="../bower_components/jsyg-path/JSYG.Path.js"></script>
-        <script src="../bower_components/jsyg-draggable/JSYG.Draggable.js"></script>
-        <script src="../bower_components/jsyg-resizable/JSYG.Resizable.js"></script>
-        <script src="../bower_components/jsyg-rotatable/JSYG.Rotatable.js"></script>
-        <script src="../bower_components/jsyg-selection/JSYG.Selection.js"></script>
-        <script src="../bower_components/jsyg-container/JSYG.Container.js"></script>
-        <script src="../bower_components/jsyg-boundingbox/JSYG.BoundingBox.js"></script>
-        <script src="../bower_components/jsyg-alignment/JSYG.Alignment.js"></script>
-        <script src="../JSYG.Editor.js"></script>
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/jsyg/JSYG.js"></script>
+        <script src="bower_components/jQuery.Hotkeys/jquery.hotkeys.js"></script>
+        <script src="bower_components/jsyg-path/JSYG.Path.js"></script>
+        <script src="bower_components/jsyg-draggable/JSYG.Draggable.js"></script>
+        <script src="bower_components/jsyg-resizable/JSYG.Resizable.js"></script>
+        <script src="bower_components/jsyg-rotatable/JSYG.Rotatable.js"></script>
+        <script src="bower_components/jsyg-selection/JSYG.Selection.js"></script>
+        <script src="bower_components/jsyg-container/JSYG.Container.js"></script>
+        <script src="bower_components/jsyg-boundingbox/JSYG.BoundingBox.js"></script>
+        <script src="bower_components/jsyg-alignment/JSYG.Alignment.js"></script>
+        <script src="JSYG.Editor.js"></script>
     </head>
     <body>
         
@@ -61,41 +61,6 @@
             editor.enableCtrls();
             editor.enable();
             editor.clipBoard.enableKeyShortCuts();
-            
-            /*
-            function getXML(url) {
-                
-                return new Promise(function(resolve,reject) {
-                    
-                    var xhr = new XMLHttpRequest();
-                    
-                    xhr.open("GET",url);
-                    
-                    xhr.onload = function() {
-                        
-                        if (this.status != 200 && this.status != 0) reject( new Error(this.responseText) );
-                        
-                        resolve( this.responseXML.documentElement );
-                    };
-                    
-                    xhr.send();
-                    
-                });
-            }
-                                    
-            getXML("example.svg").then(function(svg) {
-            
-                container.append(svg);
-                
-                editor.list = "#content svg *";
-                editor.selection.multiple = true;
-                editor.selection.typeOver = "full";
-                editor.enableCtrls();
-                editor.enable();
-            })
-            .catch(console.error.bind(console));
-            */
-            
             
             new JSYG("[name=ctrlPoints]").on("change",function() {
                 var method = (this.checked ? "enable" : "disable") + "Ctrls";
