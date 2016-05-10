@@ -3,9 +3,37 @@
 
 (function(factory) {
 
-    if (typeof define != "undefined" && define.amd) define("jsyg-editor",["jsyg","jsyg-path","jsyg-boundingbox","jsyg-selection","jsyg-container","jsyg-rotatable","jsyg-draggable","jsyg-resizable","jsyg-alignment"],factory);
+    if (typeof module == "object" && typeof module.exports == "object") {
+      
+      module.exports = factory(
+        require("jsyg"),
+        require("jsyg-path"),
+        require("jsyg-boundingbox"),
+        require("jsyg-selection"),
+        require("jsyg-container"),
+        require("jsyg-rotatable")
+      );
+    }
+    else if (typeof define != "undefined" && define.amd) {
+      
+      define("jsyg-editor",[
+        "jsyg",
+        "jsyg-path",
+        "jsyg-boundingbox",
+        "jsyg-selection",
+        "jsyg-container",
+        "jsyg-rotatable",
+        "jsyg-draggable",
+        "jsyg-resizable",
+        "jsyg-alignment"
+      ],factory);
+    }
     else if (typeof JSYG != "undefined") {
-        if (JSYG.Path && JSYG.Vect && JSYG.BoundingBox && JSYG.Selection && JSYG.Container && JSYG.Draggable && JSYG.Resizable && JSYG.Rotatable && JSYG.Alignment) factory(JSYG,JSYG.Path,JSYG.BoundingBox,JSYG.Selection,JSYG.Container,JSYG.Rotatable);
+      
+        if (JSYG.Path && JSYG.Vect && JSYG.BoundingBox && JSYG.Selection && JSYG.Container && JSYG.Draggable && JSYG.Resizable && JSYG.Rotatable && JSYG.Alignment) {
+          
+          factory(JSYG,JSYG.Path,JSYG.BoundingBox,JSYG.Selection,JSYG.Container,JSYG.Rotatable);
+        }
         else throw new Error("Dependency is missing");
     }
     else throw new Error("JSYG is needed");
