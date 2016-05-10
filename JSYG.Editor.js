@@ -141,7 +141,7 @@
         for (var n in options) {
             if (options.hasOwnProperty(n) && (n in this)) {
                 if (ctrls.indexOf(n) !== -1 || plugins.indexOf(n) !== -1) this[n].set(options[n]);
-                else if (n == 'target' || n == 'list') this[n](options[n]);
+                else if (n == 'target') this[n](options[n]);
                 else this[n] = options[n];
             }
         }
