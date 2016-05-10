@@ -36,8 +36,6 @@ editor.enable();
 
 ##### without bundler
 ```html
-<link rel="stylesheet" href="node_modules/jsyg-boundingbox/JSYG.BoundingBox.css"/>
-<link rel="stylesheet" href="node_modules/jsyg-selection/JSYG.Selection.css"/>
 <link rel="stylesheet" href="node_modules/jsyg-editor/JSYG.Editor.css"/>
 
 <script src="node_modules/jquery/dist/jquery.js"></script>
