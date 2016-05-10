@@ -1,6 +1,6 @@
 {
   "name": "jsyg-editor",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "Editor of svg chapes (JSYG framework)",
   "main": "JSYG.Editor.js",
   "directories": {
