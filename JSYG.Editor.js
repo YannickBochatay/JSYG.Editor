@@ -11,7 +11,10 @@
         require("jsyg-boundingbox"),
         require("jsyg-selection"),
         require("jsyg-container"),
-        require("jsyg-rotatable")
+        require("jsyg-rotatable"),
+        require("jsyg-draggable"),
+        require("jsyg-resizable"),
+        require("jsyg-alignment")
       );
     }
     else if (typeof define != "undefined" && define.amd) {
