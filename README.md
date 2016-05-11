@@ -1,5 +1,8 @@
 # JSYG.Editor
-Editor of svg chapes with [JSYG framework](https://github.com/YannickBochatay/JSYG)
+Editor of svg shapes with [JSYG framework](https://github.com/YannickBochatay/JSYG)
+
+If you look for a complete SVG editor with very simple API, try [JSYG.FullEditor](https://github.com/YannickBochatay/JSYG.FullEditor).
+This one is just a brick.
 
 
 ### Demo
@@ -21,8 +24,10 @@ You can also install it with bower
 import Editor from "jsyg-editor"
 
 let editor = new Editor("#mySVGContainer");
-editor.list = "#mySVGContainer > [data-editable]";
-editor.enable({ctrls:"all"});
+editor.enable({
+  list:"#mySVGContainer > [data-editable]"
+  ctrls:"all"
+});
 ```
 
 ##### browserify
@@ -30,8 +35,10 @@ editor.enable({ctrls:"all"});
 var Editor = require("jsyg-editor");
 
 let editor = new Editor("#mySVGContainer");
-editor.list = "#mySVGContainer > [data-editable]";
-editor.enable({ctrls:"all"});
+editor.enable({
+  list:"#mySVGContainer > [data-editable]"
+  ctrls:"all"
+});
 ```
 
 ##### without bundler
@@ -51,8 +58,10 @@ editor.enable({ctrls:"all"});
 <script src="node_modules/jsyg-alignment/JSYG.Alignment.js"></script>
 <script src="node_modules/jsyg-editor/JSYG.Editor.js"></script>
 <script>
-    var editor = new JSYG.Editor("#mySVGContainer");
-    editor.list = "#mySVGContainer > [data-editable]";
-    editor.enable({ctrls:"all"});
+  var editor = new JSYG.Editor("#mySVGContainer");
+  editor.enable({
+    list:"#mySVGContainer > [data-editable]"
+    ctrls:"all"
+  });
 </script>
 ```

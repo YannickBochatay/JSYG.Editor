@@ -54,10 +54,15 @@
             
             var editor = new JSYG.Editor(container);
             
-            editor.list = "#content > [data-editable]";
-            editor.selection.multiple = true;
-            editor.selection.typeOver = "full";
-            editor.enable({ctrls:["resize"]});
+            editor.enable({
+              list : "#content > [data-editable]",
+              ctrls: "all",
+              selection : {
+                multiple : true,
+                typeover:"full"
+              }
+            });
+            
             editor.clipBoard.enableKeyShortCuts();
             
             new JSYG("[name=ctrlPoints]").on("change",function() {
