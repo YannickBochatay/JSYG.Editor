@@ -1,6 +1,6 @@
 {
   "name": "jsyg-editor",
-  "version": "0.4.9",
+  "version": "0.4.10",
   "description": "Editor of svg chapes (JSYG framework)",
   "main": "JSYG.Editor.js",
   "directories": {
@@ -26,14 +26,14 @@
   },
   "homepage": "https://github.com/YannickBochatay/JSYG.Editor#readme",
   "dependencies": {
-    "jsyg": "^0.6.7",
-    "jsyg-alignment": "^0.1.0",
-    "jsyg-boundingbox": "^0.1.0",
-    "jsyg-container": "^0.1.0",
-    "jsyg-draggable": "^0.2.3",
-    "jsyg-path": "^0.1.5",
-    "jsyg-resizable": "^0.2.3",
-    "jsyg-rotatable": "^0.1.1",
-    "jsyg-selection": "^0.1.2"
+    "jsyg": "latest",
+    "jsyg-alignment": "latest",
+    "jsyg-boundingbox": "latest",
+    "jsyg-container": "latest",
+    "jsyg-draggable": "latest",
+    "jsyg-path": "latest",
+    "jsyg-resizable": "latest",
+    "jsyg-rotatable": "latest",
+    "jsyg-selection": "latest"
   }
 }

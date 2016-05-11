@@ -22,7 +22,7 @@ import Editor from "jsyg-editor"
 
 let editor = new Editor("#mySVGContainer");
 editor.list = "#mySVGContainer > [data-editable]";
-editor.enable();
+editor.enable({ctrls:"all"});
 ```
 
 ##### browserify
@@ -31,7 +31,7 @@ var Editor = require("jsyg-editor");
 
 let editor = new Editor("#mySVGContainer");
 editor.list = "#mySVGContainer > [data-editable]";
-editor.enable();
+editor.enable({ctrls:"all"});
 ```
 
 ##### without bundler
@@ -53,6 +53,6 @@ editor.enable();
 <script>
     var editor = new JSYG.Editor("#mySVGContainer");
     editor.list = "#mySVGContainer > [data-editable]";
-    editor.enable();
+    editor.enable({ctrls:"all"});
 </script>
 ```

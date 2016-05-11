@@ -333,23 +333,32 @@
     /**
      * Activation des contrôles.<br/>
      * appelée sans argument, tous les contrôles sont activés. Sinon, en arguments (nombre variable) les noms des contrôles à activer
-     * ('Drag','Resize','Rotate','CtrlPoints','MainPoints').
+     * ('drag','resize','rotate','ctrlPoints','mainPoints').
      */
     Editor.prototype.enableCtrls = function() {
-
-        if (arguments.length === 0) {
-            for (var i=0,N=ctrls.length;i<N;i++) this[ 'ctrls'+ctrls[i] ].enable();
+      
+        var nbArgs = arguments.length,
+            arg1 = arguments[0],
+            that = this,
+            ctrlsToEnable = [];
+        
+        if (nbArgs === 0 || nbArgs === 1 && arg1 == "all") {
+          
+          ctrlsToEnable = ctrls;
+          
+        }
+        else if (nbArgs === 1) {
+          
+          if (Array.isArray(arg1)) ctrlsToEnable = arg1;
+          else if (typeof arg1 == "string") ctrlsToEnable = arg1.split(/\s*[,;\s]\s*/);
         }
         else {
-
-            var that = this;
-
-            JSYG.makeArray(arguments).forEach(function(arg) {
-                var ctrl = that['ctrls'+ JSYG.ucfirst(arg) ];
-                if (ctrl) ctrl.enable();
-            });
+          
+          ctrlsToEnable = JSYG.makeArray(arguments);
         }
-
+                
+        ctrlsToEnable.forEach(function(ctrl) { that[ 'ctrls'+ JSYG.ucfirst(ctrl) ].enable(); });
+      
         return this;
     };
 
@@ -468,8 +477,11 @@
         this.enabled = true;
 
         if (opt) {
+          
             for (n in opt) {
+              
                 if (ctrls.indexOf(n) !== -1 || n == "clipBoard") this[n].enable();
+                else if (n == "ctrls") this.enableCtrls(opt[n]);
             }
         }
 

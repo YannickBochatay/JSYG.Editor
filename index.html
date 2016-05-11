@@ -57,8 +57,7 @@
             editor.list = "#content > [data-editable]";
             editor.selection.multiple = true;
             editor.selection.typeOver = "full";
-            editor.enableCtrls();
-            editor.enable();
+            editor.enable({ctrls:["resize"]});
             editor.clipBoard.enableKeyShortCuts();
             
             new JSYG("[name=ctrlPoints]").on("change",function() {
