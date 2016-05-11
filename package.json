@@ -26,14 +26,14 @@
   },
   "homepage": "https://github.com/YannickBochatay/JSYG.Editor#readme",
   "dependencies": {
-    "jsyg": "latest",
-    "jsyg-alignment": "latest",
-    "jsyg-boundingbox": "latest",
-    "jsyg-container": "latest",
-    "jsyg-draggable": "latest",
-    "jsyg-path": "latest",
-    "jsyg-resizable": "latest",
-    "jsyg-rotatable": "latest",
-    "jsyg-selection": "latest"
+    "jsyg": ">0.0.0",
+    "jsyg-alignment": ">0.0.0",
+    "jsyg-boundingbox": ">0.0.0",
+    "jsyg-container": ">0.0.0",
+    "jsyg-draggable": ">0.0.0",
+    "jsyg-path": ">0.0.0",
+    "jsyg-resizable": ">0.0.0",
+    "jsyg-rotatable": ">0.0.0",
+    "jsyg-selection": ">0.0.0"
   }
 }
