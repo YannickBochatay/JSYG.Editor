@@ -214,9 +214,11 @@
     /**
      * Réinitialise la cible
      */
-    Editor.prototype.targetRemove = function() {
+    Editor.prototype.targetRemove = function(_preventEvent) {
 
         this._target = null;
+
+        if (!_preventEvent) this.trigger('changetarget',this.node,null);
     };
 
     /**
@@ -471,7 +473,12 @@
                 that.target(list).show(e);
             },
 
-            "deselectedlist" : function(e) { that.hide(e); }
+            "deselectedlist" : function(e) {
+
+                that.hide(e);
+                that.targetRemove();
+            
+            }
         };
 
         this.enabled = true;

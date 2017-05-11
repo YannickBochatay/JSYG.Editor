@@ -38,11 +38,14 @@
             <input type="checkbox" name="keepRatio"/> Keep ratio when resizing
         </label>
         <br/>
+        <br/>
+        <br/>
+        <br/>
         
-        <button id="moveBack">Move back</button>
-        <button id="moveToBack">Move target to back</button>
-        <button id="moveFront">Move front</button>
-        <button id="moveToFront">Move target to front</button>
+        <button id="moveBack">Move target to back</button>
+        <button id="moveBackwards">Move backwards</button>
+        <button id="moveForwards">Move frontwards</button>
+        <button id="moveFront">Move target to front</button>
         <button id="align">Align selected elements to left</button>
         <button id="group">Group elements</button>
         <button id="ungroup">Ungroup elements</button>
@@ -93,7 +96,7 @@
                 editor.ungroup();
             });
             
-            var actions = ["moveBack","moveToBack","moveFront","moveToFront"];
+            var actions = ["moveBack","moveBackwards","moveFront","moveForwards"];
             
             actions.forEach(function(action) {
                 
@@ -112,12 +115,13 @@
                                               
                        $(actionsSelector).removeAttr('disabled');
                        
-                       if (target.is(":first-child")) new JSYG('#moveBack,#moveToBack').attr("disabled","disabled");
-                       if (target.is(":last-child")) new JSYG('#moveFront,#moveToFront').attr("disabled","disabled");
+                       if (target.is(":first-child")) new JSYG('#moveBackwards,#moveBack').attr("disabled","disabled");
+                       if (target.is(":last-child")) new JSYG('#moveFront,#moveForwards').attr("disabled","disabled");
                        
                        editor.show();
                    }
-               });
+               
+                });
             });
             
             
