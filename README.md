@@ -13,8 +13,6 @@ This one is just a brick.
 ```shell
 npm install jsyg-editor
 ```
-You can also install it with bower
-
 
 
 ### Usage
