@@ -3,9 +3,40 @@
 
 (function(factory) {
 
-    if (typeof define != "undefined" && define.amd) define("jsyg-editor",["jsyg","jsyg-path","jsyg-boudingbox","jsyg-selection","jsyg-container","jsyg-rotatable","jsyg-draggable","jsyg-resizable","jsyg-alignment"],factory);
+    if (typeof module == "object" && typeof module.exports == "object") {
+      
+      module.exports = factory(
+        require("jsyg"),
+        require("jsyg-path"),
+        require("jsyg-boundingbox"),
+        require("jsyg-selection"),
+        require("jsyg-container"),
+        require("jsyg-rotatable"),
+        require("jsyg-draggable"),
+        require("jsyg-resizable"),
+        require("jsyg-alignment")
+      );
+    }
+    else if (typeof define != "undefined" && define.amd) {
+      
+      define("jsyg-editor",[
+        "jsyg",
+        "jsyg-path",
+        "jsyg-boundingbox",
+        "jsyg-selection",
+        "jsyg-container",
+        "jsyg-rotatable",
+        "jsyg-draggable",
+        "jsyg-resizable",
+        "jsyg-alignment"
+      ],factory);
+    }
     else if (typeof JSYG != "undefined") {
-        if (JSYG.Path && JSYG.Vect && JSYG.BoundingBox && JSYG.Selection && JSYG.Container && JSYG.Draggable && JSYG.Resizable && JSYG.Rotatable && JSYG.Alignment) factory(JSYG,JSYG.Path,JSYG.BoundingBox,JSYG.Selection,JSYG.Container,JSYG.Rotatable);
+      
+        if (JSYG.Path && JSYG.Vect && JSYG.BoundingBox && JSYG.Selection && JSYG.Container && JSYG.Draggable && JSYG.Resizable && JSYG.Rotatable && JSYG.Alignment) {
+          
+          factory(JSYG,JSYG.Path,JSYG.BoundingBox,JSYG.Selection,JSYG.Container,JSYG.Rotatable);
+        }
         else throw new Error("Dependency is missing");
     }
     else throw new Error("JSYG is needed");
@@ -16,6 +47,8 @@
 
     var ctrls = ['Drag','Resize','Rotate','CtrlPoints','MainPoints'],
     plugins = ['box','selection','clipBoard'];
+
+    // JSYG.support.needReplaceSeg = true
 
     /**
      * <strong>nécessite le module Editor</strong>
@@ -113,7 +146,7 @@
         for (var n in options) {
             if (options.hasOwnProperty(n) && (n in this)) {
                 if (ctrls.indexOf(n) !== -1 || plugins.indexOf(n) !== -1) this[n].set(options[n]);
-                else if (n == 'target' || n == 'list') this[n](options[n]);
+                else if (n == 'target') this[n](options[n]);
                 else this[n] = options[n];
             }
         }
@@ -183,9 +216,11 @@
     /**
      * Réinitialise la cible
      */
-    Editor.prototype.targetRemove = function() {
+    Editor.prototype.targetRemove = function(_preventEvent) {
 
         this._target = null;
+
+        if (!_preventEvent) this.trigger('changetarget',this.node,null);
     };
 
     /**
@@ -302,23 +337,32 @@
     /**
      * Activation des contrôles.<br/>
      * appelée sans argument, tous les contrôles sont activés. Sinon, en arguments (nombre variable) les noms des contrôles à activer
-     * ('Drag','Resize','Rotate','CtrlPoints','MainPoints').
+     * ('drag','resize','rotate','ctrlPoints','mainPoints').
      */
     Editor.prototype.enableCtrls = function() {
-
-        if (arguments.length === 0) {
-            for (var i=0,N=ctrls.length;i<N;i++) this[ 'ctrls'+ctrls[i] ].enable();
+      
+        var nbArgs = arguments.length,
+            arg1 = arguments[0],
+            that = this,
+            ctrlsToEnable = [];
+        
+        if (nbArgs === 0 || nbArgs === 1 && arg1 == "all") {
+          
+          ctrlsToEnable = ctrls;
+          
+        }
+        else if (nbArgs === 1) {
+          
+          if (Array.isArray(arg1)) ctrlsToEnable = arg1;
+          else if (typeof arg1 == "string") ctrlsToEnable = arg1.split(/\s*[,;\s]\s*/);
         }
         else {
-
-            var that = this;
-
-            JSYG.makeArray(arguments).forEach(function(arg) {
-                var ctrl = that['ctrls'+ JSYG.ucfirst(arg) ];
-                if (ctrl) ctrl.enable();
-            });
+          
+          ctrlsToEnable = JSYG.makeArray(arguments);
         }
-
+                
+        ctrlsToEnable.forEach(function(ctrl) { that[ 'ctrls'+ JSYG.ucfirst(ctrl) ].enable(); });
+      
         return this;
     };
 
@@ -431,14 +475,22 @@
                 that.target(list).show(e);
             },
 
-            "deselectedlist" : function(e) { that.hide(e); }
+            "deselectedlist" : function(e) {
+
+                that.hide(e);
+                that.targetRemove();
+            
+            }
         };
 
         this.enabled = true;
 
         if (opt) {
+          
             for (n in opt) {
+              
                 if (ctrls.indexOf(n) !== -1 || n == "clipBoard") this[n].enable();
+                else if (n == "ctrls") this.enableCtrls(opt[n]);
             }
         }
 
@@ -796,7 +848,7 @@
             var svg = jNode.offsetParent('farthest'),
             CTM = jNode.getMtx(svg),
             tag = jNode.getTag(),
-            needReplace = JSYG.support.needReplaceSeg,
+            needReplace = true, // JSYG.support.needReplaceSeg, ne fonctionne pas avec le polyfill pathseg, je ne comprends pas pourquoi
             list = [],N,
             that = this,
             start = function(e){
@@ -829,13 +881,16 @@
 
                 jPath.rel2abs();
 
-                list = jPath.getSegList();
+                list = jPath.getSegList().map(function(seg) {
+                    return { seg : seg }
+                });
 
-                list.forEach(function(seg,i) {
+                list.forEach(function(item,i) {
 
                     if (!that.list[i]) { that.list[i] = {}; }
 
                     var pt1,pt2,jShape,path,drag,
+                    seg = item.seg,
                     test1 = seg.x1!=null && seg.y1!=null,
                     test2 = seg.x2!=null && seg.y2!=null;
 
@@ -860,8 +915,6 @@
 
                                 var path1 = new Path(that.list[i].path1),
                                 CTM = jPath.getMtx(svg),
-                                //oldX = seg.x1,
-                                //oldY = seg.y1,
                                 jShape = new JSYG(this),
                                 center = jShape.getCenter(),
                                 pt = new JSYG.Vect(center.x,center.y).mtx(jShape.getMtx(svg));
@@ -874,25 +927,23 @@
 
                                 if (i>0 && that.linked) {
 
-                                    var prevSeg = list[i-1];
+                                    var prevSeg = list[i-1].seg;
 
                                     if (prevSeg.x2!=null && prevSeg.y2!=null) {
 
-                                        //var angleTest1 = Math.atan2(oldY-prevSeg.y,oldX-prevSeg.x),
-                                        //angleTest2 = Math.atan2(oldY-prevSeg.y2,oldX-prevSeg.x2);
-
-                                        //if ( ((angleTest1%Math.PI)*180/Math.PI).toFixed(1) === ((angleTest2%Math.PI)*180/Math.PI).toFixed(1) )
-                                        //{
                                         var angle = Math.atan2(seg.y1-prevSeg.y,seg.x1-prevSeg.x)+Math.PI,
                                         path2 =new Path( that.list[i-1].path2),
                                         dist = Math.sqrt(Math.pow(prevSeg.x2-prevSeg.x,2) + Math.pow(prevSeg.y2-prevSeg.y,2));
+
+                                        const x2 = prevSeg.x2
                                         prevSeg.x2 = prevSeg.x + dist * Math.cos(angle);
                                         prevSeg.y2 = prevSeg.y + dist * Math.sin(angle);
 
                                         pt = new JSYG.Vect(prevSeg.x2,prevSeg.y2).mtx(CTM);
                                         new JSYG(that.list[i-1].pt2).setCenter(pt.x,pt.y);
                                         path2.replaceSeg(0,'M',pt.x,pt.y);
-                                        //}
+
+                                        if (needReplace) jPath.replaceSeg(i-1,prevSeg)
                                     }
                                 }
 
@@ -981,16 +1032,11 @@
                                 seg.y2 = pt.y;
 
                                 if (i+1<list.length && that.linked) {
-
-                                    var nextSeg = list[i+1];
+                                    
+                                    var nextSeg = list[i+1].seg;
 
                                     if (nextSeg.x1!=null && nextSeg.y1!=null) {
 
-                                        //var angleTest1 = Math.atan2(oldY-seg.y,oldX-seg.x),
-                                        //angleTest2 = Math.atan2(oldY-nextSeg.y1,oldX-nextSeg.x1);
-
-                                        //if ( ((angleTest1%Math.PI)*180/Math.PI).toFixed(1) === ((angleTest2%Math.PI)*180/Math.PI).toFixed(1) )
-                                        //{
                                         var angle = Math.atan2(seg.y2-seg.y,seg.x2-seg.x)+Math.PI,
                                         path1 = new Path(that.list[i+1].path1),
                                         dist = Math.sqrt(Math.pow(nextSeg.x1-seg.x,2) + Math.pow(nextSeg.y1-seg.y,2));
@@ -1000,7 +1046,8 @@
                                         pt = new JSYG.Vect(nextSeg.x1,nextSeg.y1).mtx(CTM);
                                         new JSYG(that.list[i+1].pt1).setCenter(pt.x,pt.y);
                                         path1.replaceSeg(0,'M',pt.x,pt.y);
-                                        //}
+
+                                        if (needReplace) jPath.replaceSeg(i+1,nextSeg)
                                     }
                                 }
 
@@ -1055,106 +1102,7 @@
                     }
                 });
             }
-            /*else if (tag === 'rect') {
-
-				var drag,
-				pt,pt1,pt2,
-				l = jNode.getDim();
-				l.rx = parseFloat(jNode.attr('rx') || 0);
-				l.ry = parseFloat(jNode.attr('ry') || 0);
-
-				list = [0,1,2,3];
-
-				list.forEach(function(i) {
-
-					if (!that.list[i]) { that.list[i] = {}; };
-
-					if (!that.list[i].path) {
-						var path = new Path();
-                                                path.appendTo(that.container);
-						path.addClass(that.className);
-						that.list[i].path = path[0];
-					}
-
-					if (!that.list[i].pt) {
-
-						var point = new JSYG('<'+that.shape+'>').appendTo(that.container);
-						point.addClass(that.className);
-						that.list[i].pt = point[0];
-
-						drag = function(e) {
-
-							var center = point.getCenter().mtx(point.getMtx()),
-							pt1 = new JSYG.Vect(center.x,center.y).mtx(jNode.getMtx('ctm').inverse()),
-							rx, ry,
-							path = new Path(that.list[i].path),
-							l = jNode.getDim();
-
-							path.clear();
-
-							switch(i) {
-								case 0 :
-									rx = Math.max(0,pt1.x - l.x);
-									ry = Math.max(0,pt1.y - l.y);
-									path.moveTo(l.x,l.y+ry).lineTo(pt1.x,pt1.y).lineTo(l.x+rx,l.y);
-									break;
-								case 1 :
-									rx = Math.max(0,l.x+l.width-pt1.x);
-									ry = Math.max(0,pt1.y - l.y);
-									path.moveTo(l.x+l.width-rx,l.y).lineTo(pt1.x,pt1.y).lineTo(l.x+l.width,l.y+ry);
-									break;
-								case 2 :
-									rx = Math.max(0,l.x+l.width - pt1.x);
-									ry = Math.max(0,l.y+l.height - pt1.y);
-									path.moveTo(l.x+l.width,l.y+l.height-ry).lineTo(pt1.x,pt1.y).lineTo(l.x+l.width-rx,l.y+l.height);
-									break;
-								case 3 :
-									rx = Math.max(0,pt1.x - l.x);
-									ry = Math.max(0,l.y+l.height - pt1.y);
-									path.moveTo(l.x+rx,l.y+l.height).lineTo(pt1.x,pt1.y).lineTo(l.x,l.y+l.height-ry);
-									break;
-							}
-
-							jNode.attr({'rx':rx,'ry':ry});
-
-							that.editor.trigger('drag',node,e);
-							that.trigger('drag',node,e);
-						};
-
-						point.draggable({
-							type:'attributes',
-							ondrag:drag,
-							onend:end
-						});
-					}
-
-				});
-
-				pt = new JSYG.Vect(l.x+l.rx,l.y+l.ry).mtx(CTM);
-				pt1 = new JSYG.Vect(l.x,l.y+l.ry).mtx(CTM);
-				pt2 = new JSYG.Vect(l.x+l.rx,l.y).mtx(CTM);
-				new JSYG(this.list[0].pt).setDim({x:0,y:0,width:this.width,height:this.height}).setCenter(pt.x,pt.y);
-				new Path(this.list[0].path).clear().moveTo(pt1.x,pt1.y).lineTo(pt.x,pt.y).lineTo(pt2.x,pt2.y);
-
-				pt = new JSYG.Vect(l.x+l.width-l.rx,l.y+l.ry).mtx(CTM);
-				pt1 = new JSYG.Vect(l.x+l.width-l.rx,l.y).mtx(CTM);
-				pt2 = new JSYG.Vect(l.x+l.width,l.y+l.ry).mtx(CTM);
-				new JSYG(this.list[1].pt).setDim({x:0,y:0,width:this.width,height:this.height}).setCenter(pt.x,pt.y);
-				new Path(this.list[1].path).clear().moveTo(pt1.x,pt1.y).lineTo(pt.x,pt.y).lineTo(pt2.x,pt2.y);
-
-				pt = new JSYG.Vect(l.x+l.width-l.rx,l.y+l.height-l.ry).mtx(CTM);
-				pt1 = new JSYG.Vect(l.x+l.width-l.rx,l.y+l.height).mtx(CTM);
-				pt2 = new JSYG.Vect(l.x+l.width,l.y+l.height-l.ry).mtx(CTM);
-				new JSYG(this.list[2].pt).setDim({x:0,y:0,width:this.width,height:this.height}).setCenter(pt.x,pt.y);
-				new Path(this.list[2].path).clear().moveTo(pt1.x,pt1.y).lineTo(pt.x,pt.y).lineTo(pt2.x,pt2.y);
-
-				pt = new JSYG.Vect(l.x+l.rx,l.y+l.height-l.ry).mtx(CTM);
-				pt1 = new JSYG.Vect(l.x,l.y+l.height-l.ry).mtx(CTM);
-				pt2 = new JSYG.Vect(l.x+l.rx,l.y+l.height).mtx(CTM);
-				new JSYG(this.list[3].pt).setDim({x:0,y:0,width:this.width,height:this.height}).setCenter(pt.x,pt.y);
-				new Path(this.list[3].path).clear().moveTo(pt1.x,pt1.y).lineTo(pt.x,pt.y).lineTo(pt2.x,pt2.y);
-			}*/
-
+            
             N = list.length;
             while (this.list.length > N) this._remove(this.list.length-1);
 
