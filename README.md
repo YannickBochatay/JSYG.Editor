@@ -2,8 +2,7 @@
 
 Editor of svg shapes with [JSYG framework](https://github.com/YannickBochatay/JSYG)
 
-If you look for a complete SVG editor with very simple API, try [JSYG.FullEditor](https://github.com/YannickBochatay/JSYG.FullEditor).
-This one is just a brick.
+## ⚠️ Deprecated. Use [@jsyg/editor](https://github.com/YannickBochatay/jsyg-monorepo/tree/main/packages/editor) instead.
 
 ### Demo
 
